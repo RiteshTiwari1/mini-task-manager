@@ -1,0 +1,61 @@
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: mini-task-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mini_task_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mini-task-manager-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/mini_task_manager?schema=public
+      JWT_SECRET: TaskManager2024!@#SecureJwtKey$%^RandomString789&*()MiniApp
+      PORT: 5000
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "5001:5000"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mini-task-manager-frontend
+    restart: unless-stopped
+    environment:
+      REACT_APP_API_URL: http://localhost:5001/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm start
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
