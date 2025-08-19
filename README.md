@@ -211,7 +211,7 @@ npm test
 ### Backend (.env)
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mini_task_manager?schema=public
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_SECRET=TaskManager2024!@#SecureJwtKey$%^RandomString789&*()MiniApp
 PORT=5000
 ```
 
@@ -219,28 +219,6 @@ PORT=5000
 ```env
 REACT_APP_API_URL=http://localhost:5000/api
 ```
-
-## Time Spent & Trade-offs
-
-**Total Time:** ~2.5 hours
-
-### Trade-offs Made:
-1. **Simplified Authentication** - Used basic JWT without refresh tokens
-2. **Basic Validation** - Focused on essential validation rules
-3. **No Advanced Features** - Skipped features like task categories, due dates, or collaborative features
-4. **Simple Error Handling** - Basic error messages without detailed logging
-5. **Development Focus** - Optimized for development environment rather than production
-
-### What Could Be Improved:
-- Add refresh token mechanism
-- Implement proper logging and monitoring
-- Add comprehensive testing suite
-- Include task categories and priorities
-- Add drag-and-drop functionality
-- Implement real-time updates with WebSockets
-- Add email verification
-- Include task search and sorting
-- Add data export functionality
 
 ## Security Features
 
